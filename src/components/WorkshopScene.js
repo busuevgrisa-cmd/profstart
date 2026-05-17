@@ -611,7 +611,7 @@ export default function WorkshopScene({ currentStep, onObjectClick, completedSte
 
   return (
     <div className="scene-container">
-      <Canvas camera={{position:[1.8,2.6,5.8],fov:44}} shadows
+      <Canvas style={{ flex:1, minHeight:0 }} camera={{position:[1.8,2.6,5.8],fov:44}} shadows
         gl={{antialias:true,toneMapping:THREE.ACESFilmicToneMapping,toneMappingExposure:1.15}}>
         <ambientLight intensity={0.32}/>
         <directionalLight position={[6,10,4]} intensity={1.5} castShadow

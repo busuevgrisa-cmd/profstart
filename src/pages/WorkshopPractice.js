@@ -167,7 +167,7 @@ export default function WorkshopPractice({ practice, scene, onFinish }) {
         </div>
 
         {/* Main 3D area */}
-        <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ flex: 1, position: 'relative', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           <WorkshopScene
             currentStep={isTraining && !finished ? currentStep : null}
             onObjectClick={handleObjectClick}
