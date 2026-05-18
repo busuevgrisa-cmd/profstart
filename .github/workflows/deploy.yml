@@ -37,7 +37,6 @@ jobs:
         env:
           CI: false
           GENERATE_SOURCEMAP: false
-          NODE_OPTIONS: --openssl-legacy-provider
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
