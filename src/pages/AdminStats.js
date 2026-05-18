@@ -1,7 +1,7 @@
 // src/pages/AdminStats.js
 import React, { useEffect, useState } from 'react';
 import { Storage } from '../utils/storage';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, PieChart, Pie, Cell, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell, Legend } from 'recharts';
 
 const COLORS = ['#2A7DE1', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -26,7 +26,6 @@ export default function AdminStats() {
 
   const byType = [
     { name: 'Виртуальный цех', value: results.filter(r => r.sceneType === 'workshop').length },
-    { name: 'Цифровой двойник', value: results.filter(r => r.sceneType === 'digital').length },
   ];
 
   const avgByPractice = practices.map(p => {
@@ -36,31 +35,30 @@ export default function AdminStats() {
 
   const recentResults = [...results].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
 
+  const topStats = [
+    { label: 'Пользователей', value: users.length },
+    { label: '3D-сцен', value: scenes.length },
+    { label: 'Практик создано', value: practices.length },
+    { label: 'Прохождений', value: results.length },
+  ];
+
   return (
     <div className="page">
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800 }}>Аналитика платформы</h1>
+      <div className="page-header">
+        <h1 style={{ fontSize: 22, fontWeight: 800 }}>Аналитика платформы</h1>
         <p style={{ color: '#6b7280', marginTop: 4 }}>Сводная статистика по всем учебным заведениям</p>
       </div>
 
-      {/* Top stats */}
       <div className="grid grid-4" style={{ gap: 16, marginBottom: 24 }}>
-        {[
-          { label: 'Всего пользователей', value: users.length, icon: '👥', color: '#2A7DE1' },
-          { label: '3D-сцен', value: scenes.length, icon: '🎮', color: '#22c55e' },
-          { label: 'Практик создано', value: practices.length, icon: '📋', color: '#f59e0b' },
-          { label: 'Прохождений', value: results.length, icon: '✅', color: '#8b5cf6' },
-        ].map((s, i) => (
+        {topStats.map((s, i) => (
           <div key={i} className="card stat-card">
-            <div style={{ fontSize: 28, marginBottom: 4 }}>{s.icon}</div>
-            <div className="stat-value" style={{ color: s.color }}>{s.value}</div>
+            <div className="stat-value">{s.value}</div>
             <div className="stat-label">{s.label}</div>
           </div>
         ))}
       </div>
 
       <div className="grid grid-2" style={{ gap: 20, marginBottom: 20 }}>
-        {/* Users by role */}
         <div className="card">
           <div className="card-title" style={{ marginBottom: 16 }}>Пользователи по ролям</div>
           <ResponsiveContainer width="100%" height={200}>
@@ -73,7 +71,6 @@ export default function AdminStats() {
           </ResponsiveContainer>
         </div>
 
-        {/* Results by practice type */}
         <div className="card">
           <div className="card-title" style={{ marginBottom: 16 }}>Прохождения по типу практик</div>
           <ResponsiveContainer width="100%" height={200}>
@@ -88,7 +85,6 @@ export default function AdminStats() {
         </div>
       </div>
 
-      {/* Avg score by practice */}
       {avgByPractice.length > 0 && (
         <div className="card" style={{ marginBottom: 20 }}>
           <div className="card-title" style={{ marginBottom: 16 }}>Средний балл по практикам</div>
@@ -105,7 +101,6 @@ export default function AdminStats() {
         </div>
       )}
 
-      {/* Recent results */}
       {recentResults.length > 0 && (
         <div className="card">
           <div className="card-title" style={{ marginBottom: 16 }}>Последние прохождения</div>
@@ -119,7 +114,7 @@ export default function AdminStats() {
                   <td><span className={`badge ${r.mode === 'training' ? 'badge-green' : 'badge-red'}`}>{r.mode === 'training' ? 'Обучение' : 'Экзамен'}</span></td>
                   <td style={{ color: '#6b7280', fontSize: 13 }}>{new Date(r.date).toLocaleString('ru')}</td>
                   <td>{r.errors?.length || 0}</td>
-                  <td><strong style={{ color: r.score >= 80 ? '#22c55e' : r.score >= 60 ? '#f59e0b' : '#ef4444', fontSize: 16 }}>{r.score}</strong></td>
+                  <td><strong style={{ color: r.score >= 80 ? '#16a34a' : r.score >= 60 ? '#d97706' : '#dc2626', fontSize: 16 }}>{r.score}</strong></td>
                 </tr>
               ))}
             </tbody>

@@ -60,8 +60,8 @@ function AppInner() {
       <main style={{ flex: 1 }}>
         {renderPage()}
       </main>
-      <footer style={{ background: '#f9fafb', borderTop: '1px solid #e5e7eb', padding: '12px 24px', textAlign: 'center', color: '#9ca3af', fontSize: 13 }}>
-        © 2024 ПрофСтарт — Платформа виртуальных практик для учебных заведений
+      <footer style={{ background: '#fff', borderTop: '1px solid #e5e7eb', padding: '12px 32px', textAlign: 'center', color: '#9ca3af', fontSize: 13 }}>
+        © 2025 ПрофСтарт — Платформа виртуальных практик для учебных заведений
       </footer>
     </div>
   );

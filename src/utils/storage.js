@@ -9,7 +9,18 @@ const KEYS = {
   CURRENT_USER: 'ps_current_user',
 };
 
+// Version key — bump this when INITIAL_SCENES or INITIAL_PRACTICES change
+// so existing users get fresh data automatically.
+const DATA_VERSION = '2';
+
 function init() {
+  // If data version changed, reset scenes and practices to pick up new content
+  if (localStorage.getItem('ps_data_version') !== DATA_VERSION) {
+    localStorage.removeItem(KEYS.SCENES);
+    localStorage.removeItem(KEYS.PRACTICES);
+    localStorage.setItem('ps_data_version', DATA_VERSION);
+  }
+
   if (!localStorage.getItem(KEYS.USERS)) {
     localStorage.setItem(KEYS.USERS, JSON.stringify(INITIAL_USERS));
   }
@@ -22,6 +33,18 @@ function init() {
   if (!localStorage.getItem(KEYS.RESULTS)) {
     localStorage.setItem(KEYS.RESULTS, JSON.stringify([]));
   }
+
+  // Ensure existing scenes always have sceneComponent field
+  const scenes = JSON.parse(localStorage.getItem(KEYS.SCENES) || '[]').map(s => {
+    if (!s.sceneComponent) {
+      if (s.id === 'scene-lathe') return { ...s, sceneComponent: 'lathe' };
+      if (s.id === 'scene-electrical') return { ...s, sceneComponent: 'electrical' };
+      if (s.id === 'scene-welding') return { ...s, sceneComponent: 'welding' };
+      return { ...s, sceneComponent: 'lathe' };
+    }
+    return s;
+  });
+  localStorage.setItem(KEYS.SCENES, JSON.stringify(scenes));
 }
 
 init();

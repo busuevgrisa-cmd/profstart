@@ -23,10 +23,13 @@ export default function RatingsPage() {
 
   const myRank = leaderboard.findIndex(s => s.id === user.id) + 1;
 
+  const rankColors = ['#d97706', '#6b7280', '#92400e'];
+  const rankBg = ['#fef3c7', '#f3f4f6', '#fef3c7'];
+
   return (
     <div className="page">
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800 }}>🏆 Рейтинг студентов</h1>
+      <div className="page-header">
+        <h1 style={{ fontSize: 22, fontWeight: 800 }}>Рейтинг студентов</h1>
         <p style={{ color: '#6b7280', marginTop: 4 }}>Лучшие результаты по всем практикам</p>
       </div>
 
@@ -37,10 +40,12 @@ export default function RatingsPage() {
       )}
 
       {leaderboard.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: 48 }}>
-          <div style={{ fontSize: 48, marginBottom: 12 }}>🏆</div>
-          <div style={{ fontSize: 18, fontWeight: 700 }}>Рейтинг пуст</div>
-          <div style={{ color: '#6b7280', marginTop: 4 }}>Пройдите первую практику, чтобы попасть в рейтинг!</div>
+        <div className="card">
+          <div className="empty-state">
+            <div className="empty-state-icon">#</div>
+            <div className="empty-state-title">Рейтинг пуст</div>
+            <div className="empty-state-text">Пройдите первую практику, чтобы попасть в рейтинг</div>
+          </div>
         </div>
       ) : (
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
@@ -59,26 +64,42 @@ export default function RatingsPage() {
             <tbody>
               {leaderboard.map((s, i) => {
                 const isMe = s.id === user.id;
-                const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`;
                 return (
                   <tr key={s.id} style={{ background: isMe ? '#eff6ff' : undefined }}>
-                    <td style={{ textAlign: 'center', fontSize: i < 3 ? 22 : 16, fontWeight: 700 }}>{medal}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <span style={{
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        width: 28, height: 28, borderRadius: '50%', fontWeight: 800, fontSize: 13,
+                        background: i < 3 ? rankBg[i] : '#f3f4f6',
+                        color: i < 3 ? rankColors[i] : '#6b7280',
+                      }}>
+                        {i + 1}
+                      </span>
+                    </td>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{ width: 36, height: 36, borderRadius: '50%', background: isMe ? '#2A7DE1' : '#e5e7eb', color: isMe ? '#fff' : '#374151', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
+                        <div style={{
+                          width: 34, height: 34, borderRadius: '50%',
+                          background: isMe ? '#2A7DE1' : '#e5e7eb',
+                          color: isMe ? '#fff' : '#374151',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontWeight: 700, fontSize: 12, flexShrink: 0
+                        }}>
                           {s.name?.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()}
                         </div>
-                        <span style={{ fontWeight: isMe ? 700 : 500 }}>{s.name} {isMe && <span style={{ color: '#2A7DE1', fontSize: 12 }}>(вы)</span>}</span>
+                        <span style={{ fontWeight: isMe ? 700 : 500 }}>
+                          {s.name} {isMe && <span style={{ color: '#2A7DE1', fontSize: 12, fontWeight: 600 }}>(вы)</span>}
+                        </span>
                       </div>
                     </td>
                     <td style={{ color: '#6b7280', fontSize: 13 }}>{s.institution || '—'}</td>
                     <td style={{ color: '#6b7280', fontSize: 13 }}>{s.group || '—'}</td>
                     <td style={{ textAlign: 'center' }}>{s.attempts}</td>
                     <td style={{ textAlign: 'center' }}>
-                      <span style={{ color: s.avg >= 80 ? '#22c55e' : s.avg >= 60 ? '#f59e0b' : '#ef4444', fontWeight: 600 }}>{s.avg}</span>
+                      <span style={{ color: s.avg >= 80 ? '#16a34a' : s.avg >= 60 ? '#d97706' : '#dc2626', fontWeight: 600 }}>{s.avg}</span>
                     </td>
                     <td style={{ textAlign: 'center' }}>
-                      <strong style={{ fontSize: 18, color: s.best >= 80 ? '#22c55e' : s.best >= 60 ? '#f59e0b' : '#ef4444' }}>{s.best}</strong>
+                      <strong style={{ fontSize: 17, color: s.best >= 80 ? '#16a34a' : s.best >= 60 ? '#d97706' : '#dc2626' }}>{s.best}</strong>
                     </td>
                   </tr>
                 );

@@ -13,21 +13,31 @@ export default function HomePage({ setPage }) {
   return (
     <div className="page">
       {/* Hero */}
-      <div style={{ background: 'linear-gradient(135deg, #2A7DE1 0%, #1a5fb4 100%)', borderRadius: 20, padding: '32px 40px', color: '#fff', marginBottom: 28, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{
+        background: 'linear-gradient(135deg, #2A7DE1 0%, #1a5fb4 100%)',
+        borderRadius: 16, padding: '32px 36px', color: '#fff', marginBottom: 28,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+      }}>
         <div>
-          <div style={{ fontSize: 14, opacity: .8, marginBottom: 6 }}>Добро пожаловать,</div>
-          <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>{user.name}</h1>
-          <div style={{ opacity: .85, fontSize: 15 }}>
+          <div style={{ fontSize: 13, opacity: .75, marginBottom: 6, fontWeight: 500 }}>Добро пожаловать,</div>
+          <h1 style={{ fontSize: 26, fontWeight: 800, marginBottom: 8, letterSpacing: '-0.3px' }}>{user.name}</h1>
+          <div style={{ opacity: .85, fontSize: 14 }}>
             {user.role === 'student' && `Группа: ${user.group || 'не указана'} · ${user.institution}`}
             {user.role === 'teacher' && `Преподаватель · ${user.institution}`}
             {user.role === 'admin' && 'Администратор платформы ПрофСтарт'}
           </div>
-          <button className="btn" style={{ marginTop: 16, background: '#fff', color: '#2A7DE1', fontWeight: 700 }}
+          <button className="btn" style={{ marginTop: 18, background: '#fff', color: '#2A7DE1', fontWeight: 700 }}
             onClick={() => setPage(user.role === 'student' ? 'practices' : user.role === 'teacher' ? 'manage' : 'scenes')}>
-            {user.role === 'student' ? '▶ К практикам' : user.role === 'teacher' ? '⚙️ Управление' : '🔧 Панель управления'}
+            {user.role === 'student' ? 'К практикам' : user.role === 'teacher' ? 'Управление' : 'Панель управления'}
           </button>
         </div>
-        <div style={{ fontSize: 80, opacity: .3 }}>⚙️</div>
+        <div style={{
+          width: 80, height: 80, borderRadius: 20, background: 'rgba(255,255,255,.15)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 32, fontWeight: 800, color: 'rgba(255,255,255,.6)', flexShrink: 0
+        }}>
+          ПС
+        </div>
       </div>
 
       {/* Student stats */}
@@ -38,7 +48,7 @@ export default function HomePage({ setPage }) {
             <div className="stat-label">Доступно практик</div>
           </div>
           <div className="card stat-card">
-            <div className="stat-value" style={{ color: avgScore ? (avgScore >= 80 ? '#22c55e' : '#f59e0b') : '#9ca3af' }}>{avgScore ?? '—'}</div>
+            <div className="stat-value" style={{ color: avgScore ? (avgScore >= 80 ? '#16a34a' : '#d97706') : '#9ca3af' }}>{avgScore ?? '—'}</div>
             <div className="stat-label">Средний балл</div>
           </div>
           <div className="card stat-card">
@@ -68,16 +78,24 @@ export default function HomePage({ setPage }) {
       )}
 
       {/* Feature cards */}
-      <div className="grid grid-3" style={{ gap: 16 }}>
+      <div className="grid grid-2" style={{ gap: 16, maxWidth: 800 }}>
         {[
-          { icon: '🔧', title: 'Виртуальный цех', desc: 'Работа с 3D-моделью токарного станка, пошаговое выполнение технологических операций', color: '#e8f0fb' },
-          { icon: '🏭', title: 'Цифровой двойник', desc: 'Управленческие решения на реальных данных предприятия: оптимизация себестоимости и прибыли', color: '#f0fdf4' },
-          { icon: '📊', title: 'Аналитика', desc: 'Отслеживайте прогресс, выявляйте частые ошибки, скачивайте отчёты по группе', color: '#fff7ed' },
+          {
+            label: 'Виртуальный цех',
+            title: 'Виртуальный цех',
+            desc: 'Работа с 3D-моделью токарного станка, пошаговое выполнение технологических операций',
+            accent: '#2A7DE1',
+          },
+          {
+            label: 'Аналитика',
+            title: 'Аналитика и прогресс',
+            desc: 'Отслеживайте прогресс, выявляйте частые ошибки, скачивайте отчёты по группе',
+            accent: '#d97706',
+          },
         ].map((f, i) => (
-          <div key={i} className="card" style={{ background: f.color, border: 'none' }}>
-            <div style={{ fontSize: 36, marginBottom: 12 }}>{f.icon}</div>
-            <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 6 }}>{f.title}</div>
-            <div style={{ color: '#6b7280', fontSize: 14, lineHeight: 1.5 }}>{f.desc}</div>
+          <div key={i} className="card" style={{ borderTop: `3px solid ${f.accent}` }}>
+            <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 8, color: '#111827' }}>{f.title}</div>
+            <div style={{ color: '#6b7280', fontSize: 14, lineHeight: 1.6 }}>{f.desc}</div>
           </div>
         ))}
       </div>

@@ -38,13 +38,18 @@ export default function LoginPage() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <h1>⚙️ ПрофСтарт</h1>
+          <h1>ПрофСтарт</h1>
           <p>Платформа виртуальных практик</p>
         </div>
 
         <div style={{ display: 'flex', gap: 4, marginBottom: 24, background: '#f3f4f6', borderRadius: 8, padding: 4 }}>
-          {[['login','Войти'],['register','Регистрация']].map(([id, label]) => (
-            <button key={id} onClick={() => setTab(id)} className="btn" style={{ flex: 1, background: tab===id ? '#fff' : 'transparent', color: tab===id ? '#2A7DE1' : '#6b7280', boxShadow: tab===id ? '0 1px 4px rgba(0,0,0,.1)' : 'none', padding: '8px 16px' }}>
+          {[['login', 'Войти'], ['register', 'Регистрация']].map(([id, label]) => (
+            <button key={id} onClick={() => setTab(id)} className="btn" style={{
+              flex: 1, background: tab === id ? '#fff' : 'transparent',
+              color: tab === id ? '#2A7DE1' : '#6b7280',
+              boxShadow: tab === id ? '0 1px 4px rgba(0,0,0,.08)' : 'none',
+              padding: '8px 16px'
+            }}>
               {label}
             </button>
           ))}
@@ -64,12 +69,12 @@ export default function LoginPage() {
             <button className="btn btn-primary w-full" type="submit" disabled={loading}>
               {loading ? 'Вход...' : 'Войти'}
             </button>
-            <div style={{ marginTop: 20, padding: '12px', background: '#f0f4ff', borderRadius: 8 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 8, color: '#6b7280' }}>Демо-аккаунты:</div>
+            <div style={{ marginTop: 20, padding: '12px 14px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e5e7eb' }}>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 8, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '.4px' }}>Демо-аккаунты</div>
               {DEMO.map(d => (
                 <button key={d.label} type="button" onClick={() => { set('email', d.email); set('password', d.pass); }}
-                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '6px 8px', marginBottom: 4, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 6, cursor: 'pointer', fontSize: 13 }}>
-                  <strong>{d.label}:</strong> {d.email} / {d.pass}
+                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '7px 10px', marginBottom: 4, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 6, cursor: 'pointer', fontSize: 13, transition: 'border-color .15s' }}>
+                  <strong style={{ color: '#374151' }}>{d.label}:</strong> <span style={{ color: '#6b7280' }}>{d.email}</span>
                 </button>
               ))}
             </div>

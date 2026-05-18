@@ -8,8 +8,7 @@ export default function TeacherManage() {
   const [practices, setPractices] = useState([]);
   const [scenes, setScenes] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
-  const [form, setForm] = useState({ title: '', sceneId: '', group: '', mode: 'training', criteria: '', requiredAttempts: 2, targetCostReduction: 5, showErrors: true });
-  const [csvData, setCsvData] = useState(null);
+  const [form, setForm] = useState({ title: '', sceneId: '', group: '', mode: 'training', criteria: '', requiredAttempts: 2, showErrors: true });
 
   useEffect(() => {
     setPractices(Storage.getPractices().filter(p => p.teacherId === user.id));
@@ -23,7 +22,7 @@ export default function TeacherManage() {
     const p = { id: `p-${Date.now()}`, teacherId: user.id, active: true, createdAt: new Date().toISOString(), ...form };
     Storage.addPractice(p);
     setShowCreate(false);
-    setForm({ title: '', sceneId: '', group: '', mode: 'training', criteria: '', requiredAttempts: 2, targetCostReduction: 5, showErrors: true });
+    setForm({ title: '', sceneId: '', group: '', mode: 'training', criteria: '', requiredAttempts: 2, showErrors: true });
     setPractices(Storage.getPractices().filter(p => p.teacherId === user.id));
   };
 
@@ -42,63 +41,62 @@ export default function TeacherManage() {
     }
   };
 
-  const handleCsvUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const text = ev.target.result;
-      const rows = text.split('\n').filter(Boolean).map(r => r.split(','));
-      setCsvData(rows);
-    };
-    reader.readAsText(file);
-  };
-
   const getScene = (id) => scenes.find(s => s.id === id);
 
   return (
     <div className="page">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      <div className="page-header-row">
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 800 }}>Управление практиками</h1>
+          <h1 style={{ fontSize: 22, fontWeight: 800 }}>Управление практиками</h1>
           <p style={{ color: '#6b7280', marginTop: 4 }}>{practices.length} практик создано</p>
         </div>
         <button className="btn btn-primary" onClick={() => setShowCreate(true)}>+ Создать практику</button>
       </div>
 
       {practices.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: 48 }}>
-          <div style={{ fontSize: 48, marginBottom: 12 }}>📋</div>
-          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Нет созданных практик</div>
-          <div style={{ color: '#6b7280', marginBottom: 20 }}>Создайте первую практику для ваших студентов</div>
-          <button className="btn btn-primary" onClick={() => setShowCreate(true)}>+ Создать практику</button>
+        <div className="card">
+          <div className="empty-state">
+            <div className="empty-state-icon">П</div>
+            <div className="empty-state-title">Нет созданных практик</div>
+            <div className="empty-state-text" style={{ marginBottom: 20 }}>Создайте первую практику для ваших студентов</div>
+            <button className="btn btn-primary" onClick={() => setShowCreate(true)}>+ Создать практику</button>
+          </div>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {practices.map(p => {
             const scene = getScene(p.sceneId);
             const results = Storage.getResultsForPractice(p.id);
             return (
               <div key={p.id} className="card">
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-                  <div style={{ fontSize: 40 }}>{scene?.preview || '📋'}</div>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 10, background: '#e8f0fb', color: '#2A7DE1',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 800, flexShrink: 0
+                  }}>
+                    Ц
+                  </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 4 }}>
-                      <span style={{ fontWeight: 700, fontSize: 16 }}>{p.title}</span>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 5, flexWrap: 'wrap' }}>
+                      <span style={{ fontWeight: 700, fontSize: 15 }}>{p.title}</span>
                       <span className={`badge ${p.active ? 'badge-green' : 'badge-gray'}`}>{p.active ? 'Активна' : 'Неактивна'}</span>
-                      <span className={`badge ${p.mode === 'training' ? 'badge-blue' : 'badge-red'}`}>{p.mode === 'training' ? '📚 Обучение' : '📝 Экзамен'}</span>
+                      <span className={`badge ${p.mode === 'training' ? 'badge-blue' : 'badge-red'}`}>{p.mode === 'training' ? 'Обучение' : 'Экзамен'}</span>
                     </div>
                     <div style={{ color: '#6b7280', fontSize: 13, marginBottom: 6 }}>
                       {scene?.name} · Группа: <strong>{p.group || 'все'}</strong> · Прошли: <strong>{results.length}</strong> студентов
                     </div>
-                    {p.criteria && <div style={{ fontSize: 13, color: '#374151', background: '#f8fafc', padding: '6px 10px', borderRadius: 6 }}>{p.criteria}</div>}
+                    {p.criteria && (
+                      <div style={{ fontSize: 13, color: '#374151', background: '#f8fafc', padding: '6px 10px', borderRadius: 6, borderLeft: '3px solid #2A7DE1' }}>
+                        {p.criteria}
+                      </div>
+                    )}
                   </div>
-                  <div style={{ display: 'flex', gap: 8, flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', gap: 6, flexDirection: 'column', flexShrink: 0 }}>
                     <button className="btn btn-sm btn-outline" onClick={() => toggleMode(p.id, p.mode)}>
-                      {p.mode === 'training' ? '→ В экзамен' : '→ В обучение'}
+                      {p.mode === 'training' ? 'В экзамен' : 'В обучение'}
                     </button>
                     <button className="btn btn-sm btn-secondary" onClick={() => toggleActive(p.id, p.active)}>
-                      {p.active ? '⏸ Деактивировать' : '▶ Активировать'}
+                      {p.active ? 'Деактивировать' : 'Активировать'}
                     </button>
                     <button className="btn btn-sm btn-danger" onClick={() => deletePractice(p.id)}>Удалить</button>
                   </div>
@@ -109,23 +107,6 @@ export default function TeacherManage() {
         </div>
       )}
 
-      {/* CSV Upload section */}
-      <div className="card mt-6">
-        <div className="card-title" style={{ marginBottom: 12 }}>📂 Загрузка данных предприятия (CSV)</div>
-        <p style={{ color: '#6b7280', fontSize: 14, marginBottom: 12 }}>Загрузите CSV-файл с данными предприятия для цифрового двойника</p>
-        <input type="file" accept=".csv" onChange={handleCsvUpload} style={{ marginBottom: 12 }} />
-        {csvData && (
-          <div style={{ overflowX: 'auto' }}>
-            <table className="table">
-              <thead><tr>{csvData[0]?.map((h, i) => <th key={i}>{h}</th>)}</tr></thead>
-              <tbody>{csvData.slice(1, 6).map((row, i) => <tr key={i}>{row.map((cell, j) => <td key={j}>{cell}</td>)}</tr>)}</tbody>
-            </table>
-            <div className="alert alert-success mt-2">✅ Загружено строк: {csvData.length - 1}</div>
-          </div>
-        )}
-      </div>
-
-      {/* Create modal */}
       {showCreate && (
         <div className="modal-overlay">
           <div className="modal" style={{ maxWidth: 600 }}>
@@ -140,7 +121,7 @@ export default function TeacherManage() {
               <label className="form-label">Сцена из библиотеки</label>
               <select className="form-select" value={form.sceneId} onChange={e => set('sceneId', e.target.value)}>
                 <option value="">-- Выберите сцену --</option>
-                {scenes.map(s => <option key={s.id} value={s.id}>{s.preview} {s.name}</option>)}
+                {scenes.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
             </div>
 
@@ -164,22 +145,15 @@ export default function TeacherManage() {
               <div className="form-group" style={{ margin: 0 }}>
                 <label className="form-label">Режим</label>
                 <select className="form-select" value={form.mode} onChange={e => set('mode', e.target.value)}>
-                  <option value="training">📚 Обучение</option>
-                  <option value="exam">📝 Экзамен</option>
+                  <option value="training">Обучение</option>
+                  <option value="exam">Экзамен</option>
                 </select>
               </div>
               <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">Мин. успешных попыток (до экзамена)</label>
+                <label className="form-label">Мин. успешных попыток</label>
                 <input type="number" className="form-input" value={form.requiredAttempts} onChange={e => set('requiredAttempts', Number(e.target.value))} min={1} max={10} />
               </div>
             </div>
-
-            {scenes.find(s => s.id === form.sceneId)?.type === 'digital' && (
-              <div className="form-group">
-                <label className="form-label">Целевое снижение себестоимости (%)</label>
-                <input type="number" className="form-input" value={form.targetCostReduction} onChange={e => set('targetCostReduction', Number(e.target.value))} min={1} max={30} />
-              </div>
-            )}
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
               <input type="checkbox" id="showErrors" checked={form.showErrors} onChange={e => set('showErrors', e.target.checked)} />
@@ -187,7 +161,7 @@ export default function TeacherManage() {
             </div>
 
             <div style={{ display: 'flex', gap: 8 }}>
-              <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleCreate}>✅ Создать</button>
+              <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleCreate}>Создать</button>
               <button className="btn btn-secondary" style={{ flex: 1 }} onClick={() => setShowCreate(false)}>Отмена</button>
             </div>
           </div>

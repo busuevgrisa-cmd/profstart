@@ -32,7 +32,7 @@ export default function Navbar({ page, setPage }) {
 
   return (
     <nav className="navbar">
-      <span className="navbar-logo">⚙️ ПрофСтарт</span>
+      <span className="navbar-logo">ПрофСтарт</span>
       <div className="navbar-links">
         {links.map(l => (
           <button key={l.id} className={`nav-link${page === l.id ? ' active' : ''}`} onClick={() => setPage(l.id)}>

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Storage } from '../utils/storage';
 
 const ROLE_LABELS = { student: 'Студент', teacher: 'Преподаватель', admin: 'Администратор' };
+const ROLE_COLORS = { admin: '#7c3aed', teacher: '#2A7DE1', student: '#16a34a' };
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -38,18 +39,18 @@ export default function AdminUsers() {
 
   return (
     <div className="page">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      <div className="page-header-row">
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 800 }}>Управление пользователями</h1>
+          <h1 style={{ fontSize: 22, fontWeight: 800 }}>Управление пользователями</h1>
           <p style={{ color: '#6b7280', marginTop: 4 }}>{stats.total} пользователей · {stats.students} студентов · {stats.teachers} преподавателей</p>
         </div>
         <button className="btn btn-primary" onClick={() => setShowAdd(true)}>+ Добавить пользователя</button>
       </div>
 
       <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
-        <input className="form-input" style={{ maxWidth: 280 }} placeholder="🔍 Поиск по имени или email" value={search} onChange={e => setSearch(e.target.value)} />
+        <input className="form-input" style={{ maxWidth: 280 }} placeholder="Поиск по имени или email" value={search} onChange={e => setSearch(e.target.value)} />
         <div style={{ display: 'flex', gap: 4 }}>
-          {[['all','Все'], ['student','Студенты'], ['teacher','Преподаватели'], ['admin','Администраторы']].map(([val, label]) => (
+          {[['all', 'Все'], ['student', 'Студенты'], ['teacher', 'Преподаватели'], ['admin', 'Администраторы']].map(([val, label]) => (
             <button key={val} className={`btn btn-sm ${filter === val ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setFilter(val)}>{label}</button>
           ))}
         </div>
@@ -72,7 +73,12 @@ export default function AdminUsers() {
               <tr key={u.id}>
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: u.role === 'admin' ? '#7c3aed' : u.role === 'teacher' ? '#2A7DE1' : '#22c55e', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>
+                    <div style={{
+                      width: 34, height: 34, borderRadius: '50%',
+                      background: ROLE_COLORS[u.role] || '#6b7280',
+                      color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontWeight: 700, fontSize: 12, flexShrink: 0
+                    }}>
                       {u.name?.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()}
                     </div>
                     <span style={{ fontWeight: 600 }}>{u.name}</span>
@@ -129,7 +135,7 @@ export default function AdminUsers() {
               </div>
             )}
             <div style={{ display: 'flex', gap: 8 }}>
-              <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleAdd}>✅ Создать</button>
+              <button className="btn btn-primary" style={{ flex: 1 }} onClick={handleAdd}>Создать</button>
               <button className="btn btn-secondary" style={{ flex: 1 }} onClick={() => setShowAdd(false)}>Отмена</button>
             </div>
           </div>
