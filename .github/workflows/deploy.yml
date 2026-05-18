@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '16'
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
@@ -37,6 +37,7 @@ jobs:
         env:
           CI: false
           GENERATE_SOURCEMAP: false
+          NODE_OPTIONS: --openssl-legacy-provider
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
